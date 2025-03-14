@@ -1,0 +1,49 @@
+.nav-color {
+  background-color: #1375b8;
+}
+
+ul {
+  li {
+    margin-right: 10px;
+    align-content: center;
+    a {
+      i {
+        margin-right: 4px;
+        color: #ccc;
+      }
+    }
+  }
+}
+
+.padding {
+  padding: 1rem 0px;
+}
+
+.dropdown {
+  width: 182px;
+}
+
+form {
+  i {
+    margin-right: 18px;
+    color: #ccc;
+  }
+
+  mat-form-field {
+    width: 148px;
+    mat-label {
+      color: #ffffff;
+    }
+    mat-select {
+      color: #ffffff;
+      background-color: transparent;
+      mat-option {
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.nav-link:hover {
+  color: #ffffff;
+}

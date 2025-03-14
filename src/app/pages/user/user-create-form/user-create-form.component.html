@@ -1,0 +1,277 @@
+<!-- Add this at the top of both view and create state divs -->
+<nav class="breadcrumb-nav" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/user/user-list">User List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <ng-container *ngIf="isCreateState">Create User</ng-container>
+      <ng-container *ngIf="!isCreateState && isView">View User</ng-container>
+      <ng-container *ngIf="!isCreateState && !isView">Edit User</ng-container>
+    </li>
+  </ol>
+</nav>
+
+<!-- view state -->
+<div *ngIf="!isCreateState" class="container container-width">
+  <mat-stepper #stepper>
+    <mat-step [stepControl]="createForm">
+      <form [formGroup]="createForm">
+        <ng-template class="step-label" matStepLabel>General</ng-template>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Office</mat-label>
+                <mat-select [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="office" name="office">
+                  <mat-option [disabled]="isView" *ngFor="let office of offices" [value]="office.value">
+                    {{office.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Legal Form</mat-label>
+                <mat-select  [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="person" name="person">
+                  <mat-option [disabled]="isView" *ngFor="let person of people" [value]="person.value">
+                    {{person.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 gap-3">
+              <mat-form-field>
+                <mat-label>External Id</mat-label>
+                <input [readonly]="isView" class="width-1 specific-border" matInput formControlName="externalId">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input [readonly]="isView" class="width-1 specific-border" matInput formControlName="firstName" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Middle Name</mat-label>
+                <input [readonly]="isView" class="width-1 specific-border" matInput formControlName="middleName" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input [readonly]="isView" class="width-1 specific-border" matInput formControlName="lastName" required>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input [readonly]="isView" formControlName="dob" matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle [disabled]="isView" matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Gender</mat-label>
+                <mat-select  [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="gender" name="gender">
+                  <mat-option [disabled]="isView" *ngFor="let gender of genders" [value]="gender.value">
+                    {{gender.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Staff</mat-label>
+                <mat-select  [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="staff" name="staff">
+                  <mat-option [disabled]="isView" *ngFor="let staff of staffs" [value]="staff.value">
+                    {{staff.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-label class="staff-label">Is staff ?</mat-label>
+              <mat-checkbox
+              [disabled]="isView"
+              [ngClass]="{'readonly-wrapper': isView}"
+              formControlName="isStaff">
+              </mat-checkbox>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Mobile Number</mat-label>
+                <input [readonly]="isView" class="width-1 specific-border" matInput formControlName="mobileNumber" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Client Type</mat-label>
+                <mat-select  [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="clientType" name="clientType">
+                  <mat-option [disabled]="isView" *ngFor="let clientType of clientTypes" [value]="clientType.value">
+                    {{clientType.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end gap-3">
+            <button class="back-btn" mat-button (click)="onBack()">Back</button>
+            <button *ngIf="!isView" mat-stroked-button class="submit-btn" (click)="onSubmit('update')">Update</button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="familyForm">
+      <form [formGroup]="familyForm">
+        <ng-template matStepLabel>Family Members</ng-template>
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" placeholder="Ex. 1 Main St, New York, NY"
+                required>
+        </mat-form-field>
+        <div *ngIf="!isView">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</div>
+
+<!-- create state -->
+<div *ngIf="isCreateState" class="container container-width">
+  <mat-stepper #stepper>
+    <mat-step [stepControl]="createForm">
+      <form [formGroup]="createForm">
+        <ng-template class="step-label" matStepLabel>General</ng-template>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Office</mat-label>
+                <mat-select
+                    formControlName="office"
+                    [disableRipple]="isView"
+                    [ngClass]="{'readonly-block': isView}" [disabled]="isView">
+                    <mat-option [disabled]="isView" *ngFor="let office of offices" [value]="office.value">
+                        {{office.viewValue}}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Legal Form</mat-label>
+                <mat-select [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="person" name="person">
+                  <mat-option [disabled]="isView" *ngFor="let person of people" [value]="person.value">
+                    {{person.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 gap-3">
+              <mat-form-field>
+                <mat-label>External Id</mat-label>
+                <input class="width-1 specific-border" matInput formControlName="externalId">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input class="width-1 specific-border" matInput formControlName="firstName" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Middle Name</mat-label>
+                <input class="width-1 specific-border" matInput formControlName="middleName" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input class="width-1 specific-border" matInput formControlName="lastName" required>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input formControlName="dob" matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Gender</mat-label>
+                <mat-select [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="gender" name="gender">
+                  <mat-option [disabled]="isView" *ngFor="let gender of genders" [value]="gender.value">
+                    {{gender.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Staff</mat-label>
+                <mat-select [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="staff" name="staff">
+                  <mat-option [disabled]="isView" *ngFor="let staff of staffs" [value]="staff.value">
+                    {{staff.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 gap-3">
+              <mat-label class="staff-label">Is staff ?</mat-label>
+              <mat-checkbox class="example-margin" formControlName="isStaff" (change)="onCheckboxChange($event)"></mat-checkbox>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field>
+                <mat-label>Mobile Number</mat-label>
+                <input class="width-1 specific-border" matInput formControlName="mobileNumber" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field [ngClass]="{'readonly-wrapper': isView}">
+                <mat-label>Client Type</mat-label>
+                <mat-select [ngClass]="{'readonly-block': isView}" [disabled]="isView" formControlName="clientType" name="clientType">
+                  <mat-option [disabled]="isView" *ngFor="let clientType of clientTypes" [value]="clientType.value">
+                    {{clientType.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end gap-3">
+            <button class="back-btn" mat-button (click)="onBack()">Back</button>
+            <button class="submit-btn" mat-button (click)="onSubmit('create')">Create</button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="familyForm">
+      <form [formGroup]="familyForm">
+        <ng-template matStepLabel>Family Members</ng-template>
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" placeholder="Ex. 1 Main St, New York, NY"
+                required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</div>
