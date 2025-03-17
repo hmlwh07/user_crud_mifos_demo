@@ -9,6 +9,7 @@ import { User } from 'src/app/dto/user.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
+import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-create-form',
   templateUrl: './user-create-form.component.html',
@@ -64,7 +65,7 @@ export class UserCreateFormComponent {
   isView!: boolean;
   id: any;
 
-  constructor(private userService: UserService, private location: Location, private _snackBar: MatSnackBar, private router: Router) {}
+  constructor(private userService: UserService, private location: Location, private _snackBar: MatSnackBar, private router: Router,private userApiService: UserApiService) {}
 
   onCheckboxChange($event: MatCheckboxChange) {
     console.log($event);
@@ -150,26 +151,65 @@ export class UserCreateFormComponent {
   }
 
   onCreate(user: User) {
-    this.userService.createUser(user).subscribe({
-      next: () => {
-        this._snackBar.open('User created successfully!', 'Close')._dismissAfter(3000);
-        this.router.navigate(['/user/user-list'], {
-          state: {
-            id: user.id,
-          },
-          replaceUrl: false
-        });
+    this.userApiService.createUser(user).subscribe({
+      next: (response: HttpResponse<any>) => {
+        console.log('Response:', response);
+        const statusCode = response.status;
+
+        console.log('Status Code:', statusCode);
+
+        const user = response.body;
+
+        if(statusCode === 201){
+          this.userService.createUser(user).subscribe((res) => {
+            this._snackBar.open('User created successfully!', 'Close')._dismissAfter(3000);
+            this.router.navigate(['/user/user-list'], {
+              state: {
+                id: user.id,
+              },
+              replaceUrl: false
+            });
+          });
+        } else {
+          this._snackBar.open(`Failed to create user! Status: ${statusCode}`, 'Close')._dismissAfter(3000);
+        }
+      },
+      error: (error) => {
+        const statusCode = error.status;
+        console.error('Error Status Code:', statusCode);
+
+        this._snackBar.open(`Failed to create user! Status: ${statusCode}`, 'Close')._dismissAfter(3000);
       }
     });
   }
 
   onUpdate(user: User) {
-    this.userService.updateUser(user)
-    this.router.navigate(['/user/user-list'], {
-      state: {
-        id: user.id,
+    this.userApiService.updateUser(user).subscribe({
+      next: (response: HttpResponse<User>) => {
+        console.log('Update Response:', response);
+        const statusCode = response.status;
+        console.log('Update Status Code:', statusCode);
+
+        if(statusCode === 200){
+          this.userService.updateUser(user).subscribe((res) => {
+            this._snackBar.open('User updated successfully!', 'Close')._dismissAfter(3000);
+            this.router.navigate(['/user/user-list'], {
+              state: {
+                id: user.id,
+              },
+              replaceUrl: false
+            });
+          });
+        } else {
+          this._snackBar.open(`Failed to update user! Status: ${statusCode}`, 'Close')._dismissAfter(3000);
+        }
       },
-      replaceUrl: false
+      error: (error) => {
+        const statusCode = error.status;
+        console.error('Update Error Status Code:', statusCode);
+
+        this._snackBar.open(`Failed to update user! Status: ${statusCode}`, 'Close')._dismissAfter(3000);
+      }
     });
   }
 

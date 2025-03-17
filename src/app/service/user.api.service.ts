@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../dto/user.model';
 
@@ -20,15 +20,15 @@ export class UserApiService {
     return this.http.get<User>(apiUrl + 'users/' + id);
   }
 
-  createUser(user: User): Observable<User> {
-    return this.http.post<User>(apiUrl + 'users', user);
+  createUser(user: User): Observable<HttpResponse<User>> {
+    return this.http.post<User>(apiUrl + 'users', user, { observe: 'response' });
   }
 
-  updateUser(data: User): Observable<User> {
-    return this.http.put<User>(apiUrl + 'users/' + data.id, data);
+  updateUser(data: User): Observable<HttpResponse<User>> {
+    return this.http.put<User>(apiUrl + 'users/' + data.id, data, { observe: 'response' });
   }
 
-  deleteUser(id: number): Observable<User> {
-    return this.http.delete<User>(apiUrl + 'users/' + id);
+  deleteUser(id: number): Observable<HttpResponse<User>> {
+    return this.http.delete<User>(apiUrl + 'users/' + id, { observe: 'response' });
   }
 }

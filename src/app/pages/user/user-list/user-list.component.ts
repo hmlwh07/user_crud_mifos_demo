@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/dto/user.model';
 import { UserApiService } from 'src/app/service/user.api.service';
 import { Subscription } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -110,8 +111,22 @@ export class UserListComponent {
 
   onDelete(id: number) {
     if(confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(id)
-      this.loadUsers(id);
+      this.userApiService.deleteUser(id).subscribe({
+        next: (response: HttpResponse<User>) => {
+          console.log('Delete Response:', response);
+          const statusCode = response.status;
+
+          if(statusCode === 200){
+            this.userService.deleteUser(id);
+            this.loadUsers(id);
+          } else {
+            this._snackBar.open(`Failed to delete user! Status: ${statusCode}`, 'Close')._dismissAfter(3000);
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting user:', error);
+        }
+      });
     }
   }
 
